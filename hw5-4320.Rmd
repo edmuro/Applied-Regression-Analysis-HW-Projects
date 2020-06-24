@@ -1,0 +1,376 @@
+---
+title: "STA 4320 Homework 4"
+author: "Eric Muro"
+date: "10/3/18"
+output: html_document
+---
+
+# Question 2 ISLR 3.7.9
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+library(ISLR)
+pairs(Auto)
+```
+
+### Part (b)
+
+```{r}
+head(Auto)
+```
+
+
+From the head(Auto) function, we see that we can exclude name from our cor() function by excluding the ninth column from our vector of predictors. Thus:
+
+```{r}
+cor(Auto[1:8])
+```
+
+
+### Part (c)
+
+```{r}
+fit0 <- lm(mpg~.-name, data=Auto)
+summary(fit0)
+```
+
+
+#### Part (i)
+
+We observe that the F-statistic has a significantly small p-value, thus there is a relationship between the response and at least one predictor.
+
+#### Part (ii)
+
+Observing the p-values of the coefficients, we see that the intercept, displacement, weight, year, and origin have a significant relationship with the response.
+
+#### Part (iii)
+
+Since the coefficient for year is positive and has a significant p-value, we can say there is a relationship between the year of the car and the mpg. That is, the more recent the make and model of car, the higher the mpg.
+
+### Part (d)
+
+```{r}
+par(mfrow=c(2,2))
+plot(fit0)
+```
+
+Both the Residuals vs. Fitted and Residuals vs. Leverage plots have large outliers, especially towards the top-right in the former graph and the top-left for the latter. There is one observed value with an unusually high leverage in the Residuals vs. Leverage graph.
+
+### Part (e)
+
+```{r}
+summary(lm(mpg~cylinders:displacement + cylinders:displacement + cylinders:horsepower + cylinders:weight + cylinders:year + cylinders:origin, data=Auto))
+```
+
+```{r}
+summary(lm(mpg~displacement:horsepower + displacement:weight + displacement:year + displacement:origin, data=Auto))
+```
+
+```{r}
+summary(lm(mpg~horsepower:weight + horsepower:acceleration + horsepower:year + horsepower:origin, data=Auto))
+```
+
+```{r}
+summary(lm(mpg~weight:acceleration + weight:year + weight:origin, data=Auto))
+```
+
+```{r}
+summary(lm(mpg~acceleration:year + acceleration:origin, data=Auto))
+```
+
+There are, surprisingly, little interactions that aren't statistically significant. Those that aren't statistically significant include cylinders*displacement, displacement*horsepower, displacement*year, displacement*origin, horsepower*year, and weight*acceleration.
+
+### Part (f)
+
+
+
+# Question 3 ISLR 3.7.13
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+set.seed(1)
+x <- rnorm(100)
+```
+
+
+### Part (b)
+
+```{r}
+eps <- rnorm(100,sd=0.125)
+```
+
+
+### Part (c)
+
+```{r}
+y <- -1+0.5*x+eps
+length(y)
+```
+
+We have that vector y has length 100, $\beta_0=-1$ and $\beta_1=0.5$.
+
+### Part (d)
+
+```{r}
+plot(x,y)
+```
+
+We have a slightly linear relationship between the x and y variables, with some error brought on by eps.
+
+### Part (e)
+
+```{r}
+fit1 <- lm(y~x)
+summary(fit1)
+```
+
+The estimated values for the intercept and the x-coefficent are very close to the true $\beta_0$ and $\beta_1$, -1 and 0.5, respectively, while also boasting significant p-values.
+
+### Part (f)
+
+```{r}
+plot(x,y)
+abline(fit1,col="red")
+abline(-1,0.5,col="green")
+legend("topleft", c("Least Square","Regression"), col=c("red","green"), lty=c(1,1))
+```
+
+
+### Part (g)
+
+```{r}
+fit2 <- lm(y~x+I(x^2))
+summary(fit2)
+```
+
+The p-value for the quadratic term is too large, while the F-statistic has dropped precipitously. Thus, we have that using a quadratic term has not improved model fit.
+
+### Part (h)
+
+```{r}
+set.seed(1)
+eps = rnorm(100,sd = 0.0625)
+x = rnorm(100)
+y = -1+0.5*x+eps
+fit2<-lm(y~x)
+plot(x,y)
+abline(fit2,col="blue")
+abline(-1,0.5,col="orange")
+legend("topleft", c("Least square","Regression"), col=c("blue","orange"), lty=c(1,1))
+summary(fit2)
+```
+
+The model has a visibly better fit to the data now that the variance has been reduced to 1/32
+
+### Part (i)
+
+```{r}
+set.seed(1)
+eps = rnorm(100,sd = 0.5)
+x = rnorm(100)
+y = -1+0.5*x+eps
+fit3<-lm(y~x)
+plot(x,y)
+abline(fit3,col="yellow")
+abline(-1,0.5,col="purple")
+legend("topleft", c("Least square","Regression"), col=c("yellow","purple"), lty=c(1,1))
+summary(fit3)
+```
+
+We have increased the variance in eps, and now the model appears to only tangentially fit the data, to be expected from having a larger error.
+
+### Part (j)
+
+```{r}
+confint(fit1)
+confint(fit2)
+confint(fit3)
+```
+
+The coefficients seem to be centered around 0.5, while the intercepts appear to be centered around -1.
+
+
+# Question 4 ISLR 3.7.14
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+set.seed(1)
+x1=runif(100)
+x2=0.5*x1+rnorm(100)/10
+y=2+2*x1+0.3*x2+rnorm(100)
+```
+
+
+### Part (b)
+
+```{r}
+cor(x1,x2)
+plot(x1,x2)
+```
+
+There is a highly linear correlation in the scatterplot
+
+### Part (c)
+
+```{r}
+fit1<-lm(y~x1+x2)
+summary(fit1)
+```
+
+The p-value of the coefficient of x2 is too large, while the coefficient of x1 has a significant p-value, thus we reject the null hypothesis for $\beta_1$ and accept the null for $\beta_2$.
+
+### Part (d)
+
+```{r}
+fit2<-lm(y~x1)
+summary(fit2)
+```
+
+We have that the p-value of $\beta_1$ is significant, thus we reject the null for $\beta_1$.
+
+### Part (e)
+
+```{r}
+fit3<-lm(y~x2)
+summary(fit3)
+```
+
+We observe that the p-value of $\beta_2$ is significant, thus we reject the null for $\beta_2$.
+
+### Part (f)
+
+The results do not contradict each other. We have from part (b) that x1 and x2 have a high correlation of 0.8351212, thus we see collinearity. This implies that it will be difficult to determine how each predictor separately affects the response.
+
+### Part (g)
+
+```{r}
+x1=c(x1,0.1)
+x2=c(x2,0.8)
+y=c(y,6)
+fit4=lm(y~x1+x2)
+fit5=lm(y~x1)
+fit6=lm(y~x2)
+summary(fit4)
+```
+
+```{r}
+summary(fit5)
+```
+
+```{r}
+summary(fit6)
+```
+
+The models do not differ from the models in parts (c)-(e)
+
+```{r}
+par(mfrow = c(2,2))
+plot(fit4)
+```
+
+The new models display a number of outliers in the two residuals graphs, but no high-leverage points.
+
+# Question 5 ISLR 3.7.15
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+library(MASS)
+head(Boston)
+```
+
+```{r}
+fita1<-lm(crim~zn, data=Boston)
+summary(fita1)
+fita2<-lm(crim~indus, data=Boston)
+summary(fita2)
+fita3<-lm(crim~chas, data=Boston)
+summary(fita3)
+fita4<-lm(crim~nox, data=Boston)
+summary(fita4)
+fita5<-lm(crim~rm, data=Boston)
+summary(fita5)
+fita6<-lm(crim~age, data=Boston)
+summary(fita6)
+fita7<-lm(crim~dis, data=Boston)
+summary(fita7)
+fita8<-lm(crim~rad, data=Boston)
+summary(fita8)
+fita9<-lm(crim~tax, data=Boston)
+summary(fita9)
+fita10<-lm(crim~ptratio, data=Boston)
+summary(fita10)
+fita11<-lm(crim~black, data=Boston)
+summary(fita11)
+fita12<-lm(crim~lstat, data=Boston)
+summary(fita12)
+fita13<-lm(crim~medv, data=Boston)
+summary(fita13)
+```
+
+According to the p-values within each summary, the only predictor that has an insignificant relationship with the crime rate is chas, or rather whether the suburb in question borders the Charles River.
+
+```{r}
+plot(Boston)
+```
+
+
+### Part (b)
+
+```{r}
+fitb<-lm(crim~., data=Boston)
+summary(fitb)
+```
+
+According to the summary of the least squares regression model, we can reject the null hypothesis for the predictors, in order of significance, dis (mean distance to any of five Bostonian employment centers), rad (accessibility to radial highways), medv (median value of owner-occupied homes), zn (proportion of residential land zoned for lots over 25,000 sq. feet), black (proportion of Black-American population), nox (concentration of nitrogen oxides), and lstat (percentage of lower-economic-status Bostonians).
+
+### Part (c)
+
+```{r}
+coefSimple<-c(fita1$coef[2],fita2$coef[2],fita3$coef[2],fita4$coef[2],fita5$coef[2],fita6$coef[2],fita7$coef[2],
+              fita8$coef[2],fita9$coef[2],fita10$coef[2],fita11$coef[2],fita12$coef[2],fita13$coef[2])
+
+coefMultiple<-fitb$coef[-1]
+
+plot(coefSimple,coefMultiple)
+```
+
+The graph suggests that the individual influence of each predictor pales in comparison to their influence in the multiple linear regression model, with the exception of one predictor.
+
+### Part (d)
+
+```{r}
+summary(lm(crim~zn+I(zn^2)+I(zn^3),data=Boston))
+summary(lm(crim~indus+I(indus^2)+I(indus^3),data=Boston))
+summary(lm(crim~nox+I(nox^2)+I(nox^3),data=Boston))
+summary(lm(crim~rm+I(rm^2)+I(rm^3),data=Boston))
+summary(lm(crim~age+I(age^2)+I(age^3),data=Boston))
+summary(lm(crim~dis+I(dis^2)+I(dis^3),data=Boston))
+summary(lm(crim~rad+I(rad^2)+I(rad^3),data=Boston))
+summary(lm(crim~tax+I(tax^2)+I(tax^3),data=Boston))
+summary(lm(crim~ptratio+I(ptratio^2)+I(ptratio^3),data=Boston))
+summary(lm(crim~black+I(black^2)+I(black^3),data=Boston))
+summary(lm(crim~lstat+I(lstat^2)+I(lstat^3),data=Boston))
+summary(lm(crim~medv+I(medv^2)+I(medv^3),data=Boston))
+summary(lm(crim~chas+I(chas^2)+I(chas^3),data=Boston))
+```
+
+From the least squares models of all predictors, it appears that all predictors other than rad and tax have at least some significant nonlinear relationship with the crime rate. This suggests that access to radial highways and property tax rate have little nonlinear effect on crime rate within the suburbs.
+
+
+

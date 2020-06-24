@@ -1,0 +1,154 @@
+---
+title: "STA 4320 Homework 2"
+author: "Eric Muro"
+date: "9/15/18"
+output: html_document
+---
+
+# Question 2.4.10
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+library(MASS)
+```
+
+```{r}
+Boston
+```
+
+```{r}
+?Boston
+```
+
+Thanks to the instruction ?Boston, we can see that the data frame has 506 rows and 14 columns. Each of the rows represent a town located in Boston, and each column the numbers on various features unique to that town of Boston, such as pupil-teacher ratio and median value of owner-occupied homes.
+
+### Part (b)
+
+```{r}
+# it may be helpful to do plot(Boston) in the console, and zoom in, to see some potential 
+# scatterplots to see in more detail
+
+# use this command to produce a 2x2 plot at once, for space reasons.  Increase the number of rows and columns as needed
+par(mfrow=c(3,2))
+plot(Boston$age, Boston$zn, xlab = "# buildings built before 1946", ylab = "Land Zoned")
+plot(Boston$age, Boston$crim, xlab = "# buildings built before 1946", ylab = "Crime Rate")
+plot(Boston$age, Boston$indus, xlab = "# buildings built before 1946", ylab = "# nonretail businesses")
+plot(Boston$age, Boston$nox, xlab = "# buildings built before 1946", ylab = "Nitrogen oxides concentration")
+plot(Boston$age, Boston$dis, xlab = "# buildings built before 1946", ylab = "Mean distance to employment center")
+plot(Boston$age, Boston$lstat, xlab = "# buildings built before 1946", ylab = "% lower status of the population")
+
+```
+
+From what one can tell by the scatterplots, when measuring the number of buildings constructed before a certain year, Boston has a negative relationship with amount of land zoned, a slightly positive relationship with crime rate, a positive relationship with number of nonretail businesses, a positive correlation with concentration of nitrogen oxides within the soil, a negative relationship with mean distance to any of five different employment centers, and a positive correlation with percentage of Boston's "lower status" population.
+
+Reviewing the positive correlations, it appears that the greater the number of buildings built before the end of World War II, the greater the presence of nitrogen oxides, the greater the number of nonretail businesses, while one can also expect a higher concentration of "lower status" Bostonians and crime rate. One could make interpret that the more historic towns also carry the weight of byproducts from older industries and therefore less property value, inviting less fortunate people to call those towns home and a slight increase in crime.
+
+Reviewing the negative correlations, one can perceive the greater the concentration of buildings constructed before 1940, the less residential land zoned for lots greater than 25,000 square feet, perhaps because of a population boom in towns further away from the more historic and therefore already occupied parts of Boston, and less mean distance to one of five employment centers within Boston, also perhaps pointing to towns built to accomodate new homes, perhaps suburban, instead of more city resources such as employment centers.
+
+### Part (c)
+
+```{r}
+par(mfrow = c(2,1))
+plot(Boston$age,Boston$crim, xlab = "# buildings built before 1946", ylab = "Crime Rate")
+plot(Boston$lstat,Boston$crim, xlab = "% lower status population", ylab = "Crime Rate")
+```
+
+One can make the connection between age of the buildings in a town and percentage of lower class population being indicators of crime rate. One can also make the interpretation that the combination of older, less modern edifices and higher concentration of less fortunate citizens contribute to a slightly higher prevalence for crime in parts of Boston.
+
+### Part (d)
+
+Looking at Bostom$crim with fix(data), we see a significant amount of suburbs with crime rates below 1.
+
+```{r}
+# produce 3 histograms
+par(mfrow=c(1,3))
+hist(Boston$crim, main = "# Suburbs w/ high crime", xlab = "Proportional Crime Rate", ylab = "Suburb Frequency", xlim = c(30,100), ylim = c(0, 40))
+hist(Boston$tax, main = "# Suburbs w/ high taxrate", xlab = "Prop. Tax rate", ylab = "Suburb Frequency", xlim = c(600, 800))
+hist(Boston$ptratio, main = "# Suburbs w/ pupils>>teacher", xlab = "Pupil/Teacher ratio", ylab = "Suburb frequency", xlim = c(18, 22))
+# hint: use Boston$crim>1 to get the index of which suburbs have a crime rate above 1.
+# remember that you can reference a vector x with an index i by doing x[i]
+```
+
+
+From what we can gather from these histograms, there are some suburbs that boast a crime rate up to 90%m while some suburbs have a property tax rate as high as $7,500,000. Some parts of Boston have a pupil-teacher ratio as high as 22 students per teacher.
+
+
+### Part (e)
+
+```{r}
+
+# hint: the "which" command tells you which of a certain data set equals a certain value (or is greater than, etc.)
+# then the length of that set is the number that satisfy the property
+Charles <- which(Boston$chas == "1")
+length(Charles)
+```
+
+
+There are 35 suburbs which bound the Charles River.
+
+### Part (f)
+
+```{r}
+hist(Boston$ptratio)
+```
+
+The median number of pupils-to-teacher ratio is 17 students per teacher.
+
+### Part (g)
+
+```{r}
+LowestMed <- which(Boston$medv <= 5)
+LowestMed
+```
+
+There are two suburbs in Boston with the lowest median value of owner-occupied homes, with both having median values of $5000
+
+```{r}
+Boston[399,]
+```
+```{r}
+Boston[406,]
+```
+
+Both suburbs have a 100% proportion of buildings built before 1940, much higher than the mean of ~68 percent. Both suburbs just has well have a higher than average property tax rate of 666 dollars per 10,000 dollars, versus the average of 408 dollars per 10,000. Both also have a higher than average pupil to teacher ratio at ~20 students per teacher, two students per teacher higher than the average. 
+
+### Part (h)
+
+```{r}
+Roomy <- which(Boston$rm >= 7)
+length(Roomy)
+```
+
+There are 64 Bostonian suburbs with average 7 rooms or more per dwelling
+
+```{r}
+Roomier <- which(Boston$rm >= 8)
+length(Roomier)
+```
+
+There are 13 suburbs in Boston with average 8 rooms or more per dwelling
+
+```{r}
+Roomier
+```
+```{r}
+Boston[98 ,]
+Boston[164,]
+Boston[205,]
+Boston[225,]
+Boston[226,]
+Boston[227,]
+Boston[233,]
+Boston[234,]
+Boston[254,]
+Boston[258,]
+Boston[263,]
+Boston[268,]
+Boston[365,]
+```
+
+On observing each suburb individually, out of those that average 8 or more rooms per dwelling, the majority feature a lower number of non-retail business acres per town than the mean of ~11 businesses.

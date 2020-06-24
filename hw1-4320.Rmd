@@ -1,0 +1,89 @@
+---
+title: "STA 4320 Homework 1"
+author: "Eric Muro"
+date: "8/30/18"
+output: html_document
+---
+
+# Question 2.4.8
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+college <- read.csv("College.csv")
+```
+
+### Part (b)
+use fix() function
+```{r}
+fix(college)
+```
+
+```{r}
+rownames(college)=college[,1]
+fix(college)
+```
+
+```{r}
+college=college[,-1]
+fix(college)
+```
+
+
+### Part (c)
+#### (c) i.
+use summary() function
+```{r}
+summary(college)
+```
+
+
+#### (c) ii.
+use pairs() function
+```{r}
+pairs(college[,1:10])
+```
+
+
+#### (c) iii.
+use plot() function on Outstate and Private
+```{r}
+plot(college[,1],college[,10],xlab="Out of state", ylab="Private")
+```
+
+
+#### (c) iv.
+Use summary() to display Elite students
+```{r}
+Elite=rep("No",nrow(college))
+Elite[college$Top10perc > 50]="Yes"
+Elite=as.factor(Elite)
+college=data.frame(college,Elite)
+summary(Elite)
+```
+Now use plot() to produce boxplots of Outstate vs. Elite
+```{r}
+plot(Elite,college$Outstate,xlab="Elite",ylab="Out of state")
+```
+
+#### (c) v.
+Use hist() function to produce some histograms
+```{r}
+par(mfrow=c(2,4))
+hist(college$Apps)
+hist(college$Accept)
+hist(college$Enroll)
+hist(college$Top10perc)
+hist(college$Top25perc)
+hist(college$F.Undergrad)
+hist(college$P.Undergrad)
+hist(college$Outstate)
+
+```
+
+
+#### (c) vi.
+On examining and re-examining the data here, I realize that the number of colleges with students from the top 25 percent of their high schools is close to normally distributed. On top of that, I realize that I want to know more about the practice the textbook refers to as binning, to better understand the box plot between "Elite" schools and the number of Out of State students attending. Examining the histograms of the applicants and accepted students for all the schools leaves me to believe the schools are skewed to the right, which are results I am not sure how to interpret. All in all, I am grateful for the graphical user interface rstudio affords me in examining a large data set, even if it makes me realize my skills for interpreting data are still wanting.

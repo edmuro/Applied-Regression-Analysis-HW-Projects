@@ -1,0 +1,64 @@
+---
+title: "STA 4320 Homework 8"
+author: "John Doe"
+date: "12/5/18"
+output: html_document
+---
+
+# Question 6 ISLR 5.4.5
+
+
+## Solution.
+
+### Part (b)
+
+```{r}
+set.seed(37128)
+
+library(ISLR)
+# proprtion divided into training and test sets
+fractionTraining <- 0.5
+fractionTesting <- 0.5
+
+# gather sample size for training and test sets
+nTraining <- floor(fractionTraining*nrow(Default))
+nTest <- floor(fractionTesting*nrow(Default))
+
+# find indices for training and test sets
+indicesTraining <- sort(sample(1:nrow(Default),size=nTraining))
+indicesTesting <- setdiff(1:nrow(Default), indicesTraining)
+
+# FINISH...
+```
+
+
+### Part (d)
+
+# Question 7
+
+### Part (a) 
+
+```{r}
+set.seed(37128)
+
+library(ISLR)
+# proprtion divided into training and test sets
+fractionTraining <- 0.5
+fractionTesting <- 0.5
+
+# gather sample size for training and test sets
+nTraining <- floor(fractionTraining*nrow(Default))
+nTest <- floor(fractionTesting*nrow(Default))
+
+# find indices for training and test sets
+indicesTraining <- sort(sample(1:nrow(Default),size=nTraining))
+indicesTesting <- setdiff(1:nrow(Default), indicesTraining)
+
+# FINISH...
+```
+
+### Part (b)
+
+### Part (c)
+
+### Part (d)

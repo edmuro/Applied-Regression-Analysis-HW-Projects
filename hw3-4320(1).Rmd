@@ -1,0 +1,131 @@
+---
+title: "STA 4320 Homework 3"
+author: "John Doe"
+date: "9/26/18"
+output: html_document
+---
+
+# Question 4 ISLR 3.7.8
+
+
+## Solution.
+
+### Part (a)
+The following was done after installing package "ISLR" from the console with the following code:
+install.packages('ISLR')
+
+```{r}
+library(ISLR)
+head(Auto)
+```
+```{r}
+lm.fit=lm(mpg~horsepower,data=Auto)
+attach(Auto)
+summary(lm.fit)
+```
+
+
+#### (i)
+Going by the Estimate column and horsepower row, we see that mpg and horsepower have a relationship, with an estimated coefficient of -0.157845.
+
+#### (ii)
+The coefficient between horsepower and mpg has a p-value less than the level of significance alpha = 2e-16, making the relationship strong enough to be considered significant.
+
+#### (iii)
+The relationship between mpg and horsepower is negative
+
+#### (iv)
+According to the formula constructed from the estimates of the intercept and slope, a horsepower of 98 can expect an estimated mpg of 24.467051
+```{r}
+confint(lm.fit)
+```
+Using the confidence intervals, we may expect an mpg ranging from 21.814546 to 27.1196053.
+
+### Part (b)
+
+```{r}
+plot(horsepower,mpg)
+abline(lm.fit)
+```
+
+
+### Part (c)
+
+```{r}
+par(mfrow=c(2,2))
+plot(lm.fit)
+```
+
+
+Some of the diagnostic plots show nonlinear relationships. The lines include Residuals vs. Leverage, Residuals vs. Fitted values, and Fitted values versus the square root of the standardized residuals
+
+
+# Question 5
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+epsilon <- rnorm(50)
+```
+
+
+### Part (b)
+
+
+```{r}
+X <- seq(0,5,length = 50)
+```
+
+
+### Part (c)
+
+```{r}
+Y <- 5 + 2*X + epsilon
+```
+
+
+### Part (d)
+
+```{r}
+lm.fit <- lm(Y~X)
+plot(X,Y)
+abline(lm.fit)
+y <- 5 + 2*X
+lines(y, col = "red")
+
+```
+
+
+### Part (e)
+
+```{r}
+eps <- rnorm(50)
+x <- seq(0,5,length = 50)
+y <- 4 + 3*x + eps
+y1 <- 4 + 3*x
+lm.fit1 <- lm(y~x)
+plot(x,y)
+abline(lm.fit1)
+lines(y1, col = "blue")
+
+```
+
+
+### Part (f)
+
+```{r}
+eps1 <- rnorm(50, sd=3)
+x <- seq(0,5,length = 50)
+y <- 2 + 2*x + eps
+y1 <- 2 + 2*x
+lm.fit1 <- lm(y~x)
+plot(x,y)
+abline(lm.fit1)
+lines(y1, col = "green")
+```
+
+
+After making a new graph with a wider variance of 9, there is now a wider spread of values away from the linear model.

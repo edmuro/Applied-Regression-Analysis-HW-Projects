@@ -1,0 +1,244 @@
+---
+title: "STA 4320 Homework 6"
+author: "Eric Muro"
+date: "10/31/18"
+output: html_document
+---
+
+# Question 3 ISLR 5.4.8
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+set.seed(1)
+y=rnorm(100)
+x=rnorm(100)
+y=x-2*x^2+rnorm(100)
+```
+
+In this data set, n=100 and p=2
+$y = x_1 - 2x_1^2 + \epsilon$
+
+### Part (b)
+
+```{r}
+plot(x,y)
+```
+
+The scatterplot appears to demonstrate a quadratic relationship between x and y.
+
+### Part (c)
+
+```{r}
+library(boot)
+Data<-data.frame(y,x)
+set.seed(2)
+for(i in 1:4)
+{print(cv.glm(data=Data,glm(y~poly(x,i),data=Data))$delta[1])}
+```
+
+
+### Part (d)
+
+```{r}
+set.seed(3)
+for(i in 1:4)
+{print(cv.glm(data=Data,glm(y~poly(x,i),data=Data))$delta[1])}
+```
+
+The results are the same. This is because, unlike validation set approach, there is no randomness in choosing training data or test data, as all responses are chosen for calculation.
+
+### Part (e)
+
+The quadratic model had the smallest error. This was expected, as part b demonstrated that the model is quadratic.
+
+### Part (f)
+
+```{r}
+for(i in 1:4)
+  {print(summary(glm(y~poly(x,i),data=Data))) }
+```
+
+The linear model does not have any significant coefficients, while in all other linear models, only the coefficients for the linear and quadratic term have significant p-values.
+
+# Question 3 
+
+
+## Solution.
+
+### Part (a)
+
+```{r}
+library(boot)
+library(MASS)
+data("Boston")
+set.seed(25)
+
+fit.glm<-glm(crim~., data=Boston)
+summary(fit.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+We have that the AIC is 3336.5, the LOOCV error is 42.96874, and the 10-fold CV error is 42.54521.
+
+### Part (b)
+
+```{r}
+fit1.glm<-update(fit.glm, ~.-rad)
+summary(fit1.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit1.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit1.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+The model without the previously most significant predictor, rad, has: AIC = 3378.5, LOOCV error = 46.7267, 10-fold CV error = 46.59718.
+
+### Part (c)
+
+```{r}
+fit2.glm<-update(fit.glm, ~.-rad -tax)
+summary(fit2.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit2.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit2.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+AIC = 3436.8, LOOCV = 52.54892, 10-fold CV = 53.18538
+
+```{r}
+fit3.glm<-update(fit.glm, ~.-rad -tax -black)
+summary(fit3.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit3.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit3.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+AIC = 3452.7, LOOCV = 53.44008, 10-fold CV = 53.2436
+
+```{r}
+fit4.glm<-update(fit.glm, ~.-rad -tax -black -zn)
+summary(fit4.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit4.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit4.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+AIC = 3465.4, LOOCV = 54.95249, 10-fold CV = 55.47895
+
+```{r}
+fit5.glm<-update(fit.glm, ~.-rad -tax -black -zn -lstat)
+summary(fit5.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit5.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit5.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+AIC = 3479.1, LOOCV = 56.29966, 10-fold CV = 56.45847
+
+```{r}
+fit6.glm<-update(fit.glm, ~.-rad -tax -black -zn -lstat -medv)
+summary(fit6.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit6.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit6.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+AIC = 3496.1, LOOCV = 57.79418, 10-fold CV = 58.0522
+
+```{r}
+fit7.glm<-update(fit.glm, ~.-rad -tax -black -zn -lstat -medv -ptratio)
+summary(fit7.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit7.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit7.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+AIC = 3509.1, LOOCV = 59.48639, 10-fold CV = 60.48424
+
+```{r}
+fit8.glm<-update(fit.glm, ~.-rad -tax -black -zn -lstat -medv -ptratio -nox)
+summary(fit8.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit8.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit8.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+AIC = 3514.7, LOOCV = 60.18382, 10-fold CV = 60.01261
+
+```{r}
+fit9.glm<-update(fit.glm, ~.-rad -tax -black -zn -lstat -medv -ptratio -nox -indus)
+summary(fit9.glm)
+loocv <- rep(0,8)
+cv.error.k10 <- rep(0,8)
+aicmodels <- rep(0,8)
+
+loocv[1]<- cv.glm(Boston,fit9.glm)$delta[1]
+loocv[1]
+
+cv.error.k10[1] <- cv.glm(Boston,fit9.glm, K=10)$delta[1]
+cv.error.k10[1]
+```
+
+AIC = 3525.1, LOOCV = 61.54008, 10-fold CV = 61.18861
+
+### Part (d)
+
+The model with the smallest AIC is the first model with all predictors, with AIC = 3378.5. The model with the lowest LOOCV value is the same model with all predictors, with LOOCV = 42.96874. The model with the lowest 10-fold CV is also the model with all predictors, with 10-fold CV = 42.54521. Based on this majority of evidence, one would recommend using the model with all preditctors in the Boston data set, as it has the least amount of AIC, LOOCV and 10-fold CV error.
